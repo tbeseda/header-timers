@@ -1,6 +1,6 @@
 {
   "name": "header-timers",
-  "version": "0.0.1-RC.0",
+  "version": "0.0.1-RC.1",
   "description": "Server-Timing HTTP header helper",
   "repository": {
     "type": "git",
