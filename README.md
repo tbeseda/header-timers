@@ -19,7 +19,7 @@
 npm i header-timers
 ```
 
-> [!INFO]  
+> [!NOTE]  
 > This is a Node.js library and won't work in a browser runtime.
 
 ## Usage
