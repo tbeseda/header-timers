@@ -2,7 +2,7 @@ import { hrtime } from 'node:process'
 const KEY = 'Server-Timing'
 
 export default function (options = {}) {
-  const { enabled = true, key = KEY } = options
+  const { enabled = true, prefix = 'n', key = KEY } = options
   if (!enabled) {
     return {
       headerKey: key,
@@ -11,6 +11,7 @@ export default function (options = {}) {
       timersList: () => [],
       values: () => [],
       headerValue: () => '',
+      headerObject: () => ({}),
       fullHeaderString: () => '',
       reset: () => null,
     }
@@ -18,17 +19,31 @@ export default function (options = {}) {
 
   const headerKey = key
   const timers = new Map()
+  let autoNames = []
+  let autoName = 1
 
   function start (name, description) {
+    if (!name) {
+      name = `${prefix}${autoName++}`
+      autoNames.push(name)
+    } else if (!description) {
+      description = name
+    }
     const start = hrtime.bigint()
     timers.set(name, { name, description, start })
     return start
   }
 
   function stop (name) {
+    let autoNamed = false
+    if (!name) {
+      name = autoNames.at(-1)
+      autoNamed = true
+    }
     const timer = timers.get(name)
     if (!timer) return
 
+    if (autoNamed) autoNames.pop()
     const end = hrtime.bigint()
     const ms = Number(end - timer.start) / 1e6
 
@@ -57,11 +72,17 @@ export default function (options = {}) {
     return values().join(', ')
   }
 
+  function headerObject () {
+    return { [headerKey]: headerValue() }
+  }
+
   function fullHeaderString () {
     return `${headerKey}: ${headerValue()}`
   }
 
   function reset () {
+    autoNames = []
+    autoName = 1
     timers.clear()
   }
 
@@ -72,6 +93,7 @@ export default function (options = {}) {
     timersList,
     values,
     headerValue,
+    headerObject,
     fullHeaderString,
     reset,
   }

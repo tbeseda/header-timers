@@ -2,10 +2,18 @@
   "name": "header-timers",
   "version": "0.0.1",
   "description": "Server-Timing HTTP header helper",
+  "author": "tbeseda",
+  "license": "Apache-2.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tbeseda/header-timers.git"
   },
+  "keywords": [
+    "http",
+    "server-timing",
+    "header",
+    "timer"
+  ],
   "main": "index.js",
   "type": "module",
   "files": [
@@ -16,7 +24,13 @@
     "lint.fix": "npm run lint -- --fix",
     "start": "node test/go.js",
     "tape": "tape test/**/*-test.js",
-    "test": "npm run tape"
+    "test": "node test/go.js"
+  },
+  "devDependencies": {
+    "eslint": "^8.52.0",
+    "eslint-config-standard": "^17.1.0",
+    "tap-arc": "^1.2.2",
+    "tape": "^5.7.2"
   },
   "eslintConfig": {
     "extends": "standard",
@@ -30,19 +44,5 @@
         "always-multiline"
       ]
     }
-  },
-  "keywords": [
-    "http",
-    "server-timing",
-    "header",
-    "timer"
-  ],
-  "author": "tbeseda",
-  "license": "Apache-2.0",
-  "devDependencies": {
-    "eslint": "^8.52.0",
-    "eslint-config-standard": "^17.1.0",
-    "tap-arc": "^1.2.0",
-    "tape": "^5.7.2"
   }
 }
