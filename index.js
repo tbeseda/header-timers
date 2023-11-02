@@ -2,17 +2,17 @@ import { hrtime } from 'node:process'
 const KEY = 'Server-Timing'
 
 export default function (options = {}) {
-  const { enabled = true, prefix = 'n', headerKey = KEY } = options
+  const { enabled = true, prefix = 'n', key = KEY } = options
   if (!enabled) {
     return {
-      headerKey,
+      key,
       start: () => 0,
       stop: () => 0,
       timers: () => [],
       values: () => [],
-      headerValue: () => '',
-      headerObject: () => ({}),
-      fullHeaderString: () => '',
+      value: () => '',
+      toObject: () => ({}),
+      toString: () => '',
       reset: () => null,
     }
   }
@@ -65,16 +65,16 @@ export default function (options = {}) {
     return values
   }
 
-  function headerValue () {
+  function value () {
     return values().join(', ')
   }
 
-  function headerObject () {
-    return { [headerKey]: headerValue() }
+  function toObject () {
+    return { [key]: value() }
   }
 
-  function fullHeaderString () {
-    return `${headerKey}: ${headerValue()}`
+  function toString () {
+    return `${key}: ${value()}`
   }
 
   function reset () {
@@ -84,14 +84,14 @@ export default function (options = {}) {
   }
 
   return {
-    headerKey,
+    key,
     start,
     stop,
     timers,
     values,
-    headerValue,
-    headerObject,
-    fullHeaderString,
+    value,
+    toObject,
+    toString,
     reset,
   }
 }

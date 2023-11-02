@@ -48,14 +48,28 @@ stop('database')
 
 console.log('TIMER COUNT', timers.timers().length) // 3
 
-console.log(timers.headerKey)
+console.log(timers.key)
 // "Server-Timing" - just in case you need it!
+console.log(timers.timers())
+// [ Array of Timer Objects ]
 console.log(timers.values())
-// [ Array of Timer objects ]
-console.log(timers.headerValue()) 
+/**
+ [
+   'open;dur=0.026ms',
+   'database;desc="collecting data";dur=603.098792ms',
+   'analytics;desc="log request data";dur=101.776917ms'
+ ]
+*/
+console.log(timers.value()) 
 // "open;dur=0.014ms, database;desc="collecting data";dur=603.512ms, analytics;desc="log request data";dur=101.475709ms"
-console.log(timers.fullHeaderString())
+console.log(timers.toString())
 // "Server-Timing: open;dur=0.014ms, database;desc="collecting data";dur=603.512ms, analytics;desc="log request data";dur=101.475709ms"
+console.log(timers.toObject())
+/**
+ {
+   'Server-Timing': 'open;dur=0.026ms, database;desc="collecting data";dur=603.098792ms, analytics;desc="log request data";dur=101.776917ms'
+ }
+*/
 ```
 
 Also...
@@ -75,7 +89,7 @@ stop('reset')
 
 console.log('TIMER COUNT', timers.timers().length) // 1
 
-console.log('NEW Header String', timers.fullHeaderString())
+console.log('NEW Header String', timers.toString())
 // NEW Header String "Server-Timing: reset;dur=101.799166ms"
 ```
 
@@ -100,12 +114,14 @@ stop('foo') // => 100+ms
 
 ## Goals
 
-Be helpful. Accurate. Stay small and stay fast. Then be intuitive. This means:
+Be helpful and accurate. Stay small and fast. Then be intuitive. This means:
 
 - zero dependencies
-- measured in nanoseconds
+- measure in nanoseconds
 - option to disable
 - fast primitives/operations (this needs review)
+  - no Classes
+- terse but readable API
 
 ---
 

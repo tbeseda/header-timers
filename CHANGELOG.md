@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.0.3
+
+### Changed
+
+- `headerKey` is now `key`
+- `headerValue` is now `value`
+- `fullHeaderString` is now `toString`
+- `headerObject` is now `toObject`
+
 ## 0.0.2
 
 ### Added

@@ -4,24 +4,24 @@ import HeaderTimers from '../index.js'
 
 test('header-timers', async (t) => {
   const {
-    headerKey,
+    key,
     start,
     stop,
     reset,
     timers,
     values,
-    headerValue,
-    headerObject,
-    fullHeaderString,
+    value,
+    toObject,
+    toString,
   } = HeaderTimers()
 
   await t.test('baseline without timers', () => {
-    assert.equal(typeof headerKey, 'string')
+    assert.equal(typeof key, 'string')
     assert.equal(timers().length, 0)
     assert.equal(values().length, 0)
-    assert.equal(headerValue(), '')
-    assert.deepEqual(headerObject(), { [headerKey]: '' })
-    assert.equal(fullHeaderString(), `${headerKey}: `)
+    assert.equal(value(), '')
+    assert.deepEqual(toObject(), { [key]: '' })
+    assert.equal(toString(), `${key}: `)
   })
 
   await t.test('timer with name and description', () => {
@@ -38,9 +38,9 @@ test('header-timers', async (t) => {
 
     const vals = values()
     assert(vals[0].startsWith('one;desc="description";dur='))
-    assert.equal(headerValue(), vals[0])
-    assert.deepEqual(headerObject(), { [headerKey]: vals[0] })
-    assert.equal(fullHeaderString(), `${headerKey}: ${vals[0]}`)
+    assert.equal(value(), vals[0])
+    assert.deepEqual(toObject(), { [key]: vals[0] })
+    assert.equal(toString(), `${key}: ${vals[0]}`)
   })
 
   await t.test('timer reset', () => {
@@ -78,15 +78,15 @@ test('header-timers', async (t) => {
 test('header-timers with config', async (t) => {
   await t.test('prefix', () => {
     const {
-      headerKey,
+      key,
       start,
       timers,
     } = HeaderTimers({
       prefix: '$',
-      headerKey: 'x-timer',
+      key: 'x-timer',
     })
 
-    assert.equal(headerKey, 'x-timer')
+    assert.equal(key, 'x-timer')
 
     start()
     const list = timers()
@@ -95,18 +95,18 @@ test('header-timers with config', async (t) => {
 
   await t.test('disabled timers', () => {
     const {
-      headerKey,
+      key,
       start,
       stop,
       timers,
       values,
-      headerValue,
-      headerObject,
-      fullHeaderString,
+      value,
+      toObject,
+      toString,
       reset,
     } = HeaderTimers({ enabled: false })
 
-    assert.equal(typeof headerKey, 'string')
+    assert.equal(typeof key, 'string')
     assert.equal(typeof start, 'function')
     assert.equal(typeof stop, 'function')
     assert.equal(start(), 0)
@@ -117,9 +117,9 @@ test('header-timers with config', async (t) => {
     assert.equal(stop('two'), 0)
     assert.equal(timers.length, 0)
     assert.equal(values().length, 0)
-    assert.equal(headerValue(), '')
-    assert.deepEqual(headerObject(), { })
-    assert.equal(fullHeaderString(), '')
+    assert.equal(value(), '')
+    assert.deepEqual(toObject(), { })
+    assert.equal(toString(), '')
     assert.equal(reset(), null)
   })
 })
