@@ -18,13 +18,13 @@ export default function (options = {}) {
   }
 
   const Ts = new Map()
-  let autoNames = []
-  let autoName = 1
+  let names = []
+  let counter = 1
 
   function start (name, description) {
     if (!name) {
-      name = `${prefix}${autoName++}`
-      autoNames.push(name)
+      name = `${prefix}${counter++}`
+      names.push(name)
     }
     const start = hrtime.bigint()
     Ts.set(name, { name, description, start })
@@ -34,13 +34,13 @@ export default function (options = {}) {
   function stop (name) {
     let autoNamed = false
     if (!name) {
-      name = autoNames.at(-1)
+      name = names.at(-1)
       autoNamed = true
     }
     const timer = Ts.get(name)
     if (!timer) return
 
-    if (autoNamed) autoNames.pop()
+    if (autoNamed) names.pop()
     const end = hrtime.bigint()
     const ms = Number(end - timer.start) / 1e6
 
@@ -78,8 +78,8 @@ export default function (options = {}) {
   }
 
   function reset () {
-    autoNames = []
-    autoName = 1
+    names = []
+    counter = 1
     Ts.clear()
   }
 

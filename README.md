@@ -10,7 +10,9 @@
   •
   <a href="#Usage">Usage</a>
   •
-  <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Server-Timing">MDN Reference</a>
+  <a href="#Goals">Goals</a>
+  •
+  <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Server-Timing"><code>Server-Timing</code> Reference</a>
 </p>
 
 ## Install
@@ -76,3 +78,35 @@ console.log('TIMER COUNT', timers.timers().length) // 1
 console.log('NEW Header String', timers.fullHeaderString())
 // NEW Header String "Server-Timing: reset;dur=101.799166ms"
 ```
+
+And...
+
+```js
+// names optional; be aware of the order, though!
+start() // 1
+stop()  // stop 1 => <1ms
+
+start() // 2
+start('foo')
+start() // 3
+
+stop() // stop 3 => <1ms
+
+await new Promise(resolve => setTimeout(resolve, 100))
+
+stop() // stop 2 => 100+ms
+stop('foo') // => 100+ms
+```
+
+## Goals
+
+Be helpful. Accurate. Stay small and stay fast. Then be intuitive. This means:
+
+- zero dependencies
+- measured in nanoseconds
+- option to disable
+- fast primitives/operations (this needs review)
+
+---
+
+_"It's just strings all the way down"_
