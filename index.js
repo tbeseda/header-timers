@@ -2,13 +2,13 @@ import { hrtime } from 'node:process'
 const KEY = 'Server-Timing'
 
 export default function (options = {}) {
-  const { enabled = true, prefix = 'n', key = KEY } = options
+  const { enabled = true, prefix = 'n', headerKey = KEY } = options
   if (!enabled) {
     return {
-      headerKey: key,
+      headerKey,
       start: () => 0,
       stop: () => 0,
-      timersList: () => [],
+      timers: () => [],
       values: () => [],
       headerValue: () => '',
       headerObject: () => ({}),
@@ -17,8 +17,7 @@ export default function (options = {}) {
     }
   }
 
-  const headerKey = key
-  const timers = new Map()
+  const Ts = new Map()
   let autoNames = []
   let autoName = 1
 
@@ -26,11 +25,9 @@ export default function (options = {}) {
     if (!name) {
       name = `${prefix}${autoName++}`
       autoNames.push(name)
-    } else if (!description) {
-      description = name
     }
     const start = hrtime.bigint()
-    timers.set(name, { name, description, start })
+    Ts.set(name, { name, description, start })
     return start
   }
 
@@ -40,7 +37,7 @@ export default function (options = {}) {
       name = autoNames.at(-1)
       autoNamed = true
     }
-    const timer = timers.get(name)
+    const timer = Ts.get(name)
     if (!timer) return
 
     if (autoNamed) autoNames.pop()
@@ -49,18 +46,18 @@ export default function (options = {}) {
 
     timer.end = end
     timer.ms = ms
-    timers.set(name, timer)
+    Ts.set(name, timer)
 
     return ms
   }
 
-  function timersList () {
-    return Array.from(timers.values())
+  function timers () {
+    return Array.from(Ts.values())
   }
 
   function values () {
     const values = []
-    for (const { name, description, ms } of timers.values()) {
+    for (const { name, description, ms } of Ts.values()) {
       if (!ms) continue
       values.push(`${name};${description ? `desc="${description}";` : ''}dur=${ms}ms`)
     }
@@ -83,14 +80,14 @@ export default function (options = {}) {
   function reset () {
     autoNames = []
     autoName = 1
-    timers.clear()
+    Ts.clear()
   }
 
   return {
     headerKey,
     start,
     stop,
-    timersList,
+    timers,
     values,
     headerValue,
     headerObject,

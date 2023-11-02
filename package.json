@@ -20,17 +20,13 @@
     "index.js"
   ],
   "scripts": {
-    "lint": "eslint --ext .mjs --ext .js src/ test/",
+    "lint": "eslint --ext .mjs --ext .js",
     "lint.fix": "npm run lint -- --fix",
-    "start": "node test/go.js",
-    "tape": "tape test/**/*-test.js",
-    "test": "node test/go.js"
+    "test": "npm run lint && node --test"
   },
   "devDependencies": {
     "eslint": "^8.52.0",
-    "eslint-config-standard": "^17.1.0",
-    "tap-arc": "^1.2.2",
-    "tape": "^5.7.2"
+    "eslint-config-standard": "^17.1.0"
   },
   "eslintConfig": {
     "extends": "standard",

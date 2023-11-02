@@ -44,7 +44,7 @@ stop('analytics')
 await new Promise(resolve => setTimeout(resolve, 500))
 stop('database')
 
-console.log('TIMER COUNT', timers.timersList().length) // 3
+console.log('TIMER COUNT', timers.timers().length) // 3
 
 console.log(timers.headerKey)
 // "Server-Timing" - just in case you need it!
@@ -65,13 +65,13 @@ start("this won't work")
 timers.reset()
 stop("this won't work")
 
-console.log('TIMER COUNT', timers.timersList().length) // 0
+console.log('TIMER COUNT', timers.timers().length) // 0
 
 start('reset')
 await new Promise(resolve => setTimeout(resolve, 100))
 stop('reset')
 
-console.log('TIMER COUNT', timers.timersList().length) // 1
+console.log('TIMER COUNT', timers.timers().length) // 1
 
 console.log('NEW Header String', timers.fullHeaderString())
 // NEW Header String "Server-Timing: reset;dur=101.799166ms"

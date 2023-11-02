@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict'
-import HeaderTimers from '../index.js'
+import HeaderTimers from './index.js'
 
 const timers = HeaderTimers()
 const { start, stop } = timers
