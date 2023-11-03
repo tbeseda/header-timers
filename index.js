@@ -1,4 +1,6 @@
-import { hrtime } from 'node:process'
+// import { hrtime } from 'node:process' // * maintain old Node 16 support for now
+// @ts-ignore - it's there, I promise
+const { hrtime } = process
 const KEY = 'Server-Timing'
 
 export default function (options = {}) {
