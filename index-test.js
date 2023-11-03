@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import HeaderTimers from '../index.js'
+import HeaderTimers from './index.js'
 
 test('header-timers', async (t) => {
   const {
