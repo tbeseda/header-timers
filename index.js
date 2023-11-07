@@ -19,7 +19,7 @@ export default function (options = {}) {
     }
   }
 
-  const Ts = new Map()
+  const _timers = new Map()
   let names = []
   let counter = 1
 
@@ -29,7 +29,7 @@ export default function (options = {}) {
       names.push(name)
     }
     const start = hrtime.bigint()
-    Ts.set(name, { name, description, start })
+    _timers.set(name, { name, description, start })
     return start
   }
 
@@ -39,7 +39,7 @@ export default function (options = {}) {
       name = names.at(-1)
       autoNamed = true
     }
-    const timer = Ts.get(name)
+    const timer = _timers.get(name)
     if (!timer) return
 
     if (autoNamed) names.pop()
@@ -48,42 +48,34 @@ export default function (options = {}) {
 
     timer.end = end
     timer.ms = ms
-    Ts.set(name, timer)
+    _timers.set(name, timer)
 
     return ms
-  }
-
-  function timers () {
-    return Array.from(Ts.values())
-  }
-
-  function values () {
-    const values = []
-    for (const { name, description, ms } of Ts.values()) {
-      if (!ms) continue
-      values.push(`${name};${description ? `desc="${description}";` : ''}dur=${ms}ms`)
-    }
-
-    return values
-  }
-
-  function value () {
-    return values().join(', ')
-  }
-
-  function toObject () {
-    return { [key]: value() }
-  }
-
-  function toString () {
-    return `${key}: ${value()}`
   }
 
   function reset () {
     names = []
     counter = 1
-    Ts.clear()
+    _timers.clear()
   }
+
+  function values () {
+    const values = []
+    for (const { name, description, ms } of _timers.values()) {
+      if (!ms) continue
+      const value = [name]
+      if (description) value.push(`desc="${description}"`)
+      value.push(`dur=${ms}`)
+      values.push(value.join(';'))
+    }
+
+    return values
+  }
+
+  const value = () => values().join(', ')
+  const toObject = () => ({ [key]: value() })
+  const toString = () => `${key}: ${value()}`
+  const timers = () => Array.from(_timers.values())
 
   return {
     key,

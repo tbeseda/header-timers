@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.1.1
+
+### Changed
+
+- Do not append "ms" label to durations
+
+## 0.1.0
+
+API settled and tested. minor release
+
 ## 0.0.3
 
 ### Changed

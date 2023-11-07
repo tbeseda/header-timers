@@ -58,6 +58,7 @@ test('header-timers', async (t) => {
     assert.equal(list[0].description, undefined)
     stop('two')
     const vals = values()
+    console.log('VALS', vals[0])
     assert(vals[0].startsWith('two;dur='))
   })
 
