@@ -4,6 +4,7 @@
 
 ### Added
 
+- JSDoc comments
 - `precision` option; default is 3
   1. uses `toPrecision` to set significant figures
   2. then (re)creates a Number
