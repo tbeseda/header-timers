@@ -3,8 +3,7 @@
 const { hrtime } = process
 const KEY = 'Server-Timing'
 
-export default function (options = {}) {
-  const { enabled = true, prefix = 'n', key = KEY } = options
+export default function ({ enabled = true, precision = 3, prefix = 'n', key = KEY } = {}) {
   if (!enabled) {
     return {
       key,
@@ -65,7 +64,7 @@ export default function (options = {}) {
       if (!ms) continue
       const value = [name]
       if (description) value.push(`desc="${description}"`)
-      value.push(`dur=${ms}`)
+      value.push(`dur=${Number(ms.toPrecision(precision))}`)
       values.push(value.join(';'))
     }
 

@@ -58,7 +58,6 @@ test('header-timers', async (t) => {
     assert.equal(list[0].description, undefined)
     stop('two')
     const vals = values()
-    console.log('VALS', vals[0])
     assert(vals[0].startsWith('two;dur='))
   })
 
@@ -77,7 +76,7 @@ test('header-timers', async (t) => {
 })
 
 test('header-timers with config', async (t) => {
-  await t.test('prefix', () => {
+  await t.test('prefix and key', () => {
     const {
       key,
       start,
@@ -92,6 +91,31 @@ test('header-timers with config', async (t) => {
     start()
     const list = timers()
     assert.equal(list[0].name, '$1')
+  })
+
+  await t.test('precision', async () => {
+    let precision = 1
+
+    const timers1 = HeaderTimers({ precision })
+
+    timers1.start()
+    await new Promise((resolve) => setTimeout(resolve, 100))
+    timers1.stop()
+
+    const dur1 = timers1.values()[0].split(';')[1].split('=')[1]
+    assert.equal(typeof dur1, 'string')
+    assert.equal(dur1, '100')
+
+    precision = 100
+    const timers100 = HeaderTimers({ precision })
+
+    timers100.start()
+    await new Promise((resolve) => setTimeout(resolve, 100))
+    const ms = timers100.stop()
+
+    const dur100 = timers100.values()[0].split(';')[1].split('=')[1]
+    assert.equal(typeof ms, 'number')
+    assert.equal(dur100, ms?.toString())
   })
 
   await t.test('disabled timers', () => {

@@ -1,10 +1,20 @@
 # Changelog
 
+## 0.2.0
+
+### Added
+
+- `precision` option; default is 3
+  - uses `Number.prototype.toPrecision` to set significant figures
+  - 3.1459265 -> 3.15
+  - 42.666 -> 42.7
+  - 0.000000000000 -> 0.00
+
 ## 0.1.1
 
 ### Changed
 
-- Do not append "ms" label to durations
+- Do not append "ms" units to durations
 
 ## 0.1.0
 
