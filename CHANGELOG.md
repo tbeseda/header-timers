@@ -5,10 +5,13 @@
 ### Added
 
 - `precision` option; default is 3
-  - uses `Number.prototype.toPrecision` to set significant figures
-  - 3.1459265 -> 3.15
-  - 42.666 -> 42.7
-  - 0.000000000000 -> 0.00
+  1. uses `toPrecision` to set significant figures
+  2. then (re)creates a Number
+  3. finally reports as string:
+    - 3.1459265 -> "3.15"
+    - 42.666 -> "42.7"
+    - 1.100000000001 -> "1.1"
+    - 0.000000000000 -> "0"
 
 ## 0.1.1
 
