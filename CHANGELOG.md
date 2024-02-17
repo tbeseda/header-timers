@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.2.1
+
+### Added
+
+- `count()` method to get current count of timers
+
+### Fixed
+
+- remove space when joining values for `value()`
+
 ## 0.2.0
 
 ### Added

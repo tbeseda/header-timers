@@ -9,6 +9,7 @@ const KEY = 'Server-Timing'
  * @property {(name?: string, description?: string) => bigint} start
  * @property {(name?: string) => number | void} stop
  * @property {() => { name: string, description?: string, start: bigint, end?: bigint, ms?: number }[]} timers
+ * @property {() => number} count
  * @property {() => string[]} values
  * @property {() => string} value
  * @property {() => Record<string, string>} toObject
@@ -27,6 +28,7 @@ export default function ({ enabled = true, precision = 3, prefix = 'n', key = KE
       start: () => 0n,
       stop: () => 0,
       timers: () => [],
+      count: () => 0,
       values: () => [],
       value: () => '',
       toObject: () => ({}),
@@ -102,19 +104,22 @@ export default function ({ enabled = true, precision = 3, prefix = 'n', key = KE
   }
 
   /** @returns {string} */
-  const value = () => values().join(', ')
+  const value = () => values().join(',')
   /** @returns {Record<string, string>} */
   const toObject = () => ({ [key]: value() })
   /** @returns {string} */
   const toString = () => `${key}: ${value()}`
   /** @returns {{ name: string, description?: string, start: bigint, end?: bigint, ms?: number }[]} */
   const timers = () => Array.from(_timers.values())
+  /** @returns {number} */
+  const count = () => _timers.size
 
   return {
     key,
     start,
     stop,
     timers,
+    count,
     values,
     value,
     toObject,

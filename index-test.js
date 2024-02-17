@@ -9,6 +9,7 @@ test('header-timers', async (t) => {
     stop,
     reset,
     timers,
+    count,
     values,
     value,
     toObject,
@@ -17,6 +18,7 @@ test('header-timers', async (t) => {
 
   await t.test('baseline without timers', () => {
     assert.equal(typeof key, 'string')
+    assert.equal(count(), 0)
     assert.equal(timers().length, 0)
     assert.equal(values().length, 0)
     assert.equal(value(), '')
@@ -28,6 +30,7 @@ test('header-timers', async (t) => {
     let one
     one = start('one', 'description')
     assert.equal(typeof one, 'bigint')
+    assert.equal(count(), 1)
 
     const list = timers()
     assert.equal(list[0].name, 'one')
@@ -41,24 +44,31 @@ test('header-timers', async (t) => {
     assert.equal(value(), vals[0])
     assert.deepEqual(toObject(), { [key]: vals[0] })
     assert.equal(toString(), `${key}: ${vals[0]}`)
+
+    start('two')
+    assert.equal(count(), 2)
+    stop('two')
+    assert.equal(count(), 2)
+    assert.ok(value().indexOf(' ') === -1)
   })
 
   await t.test('timer reset', () => {
     reset()
 
+    assert.equal(count(), 0)
     assert.equal(timers().length, 0)
     assert.equal(values().length, 0)
   })
 
   await t.test('timer without description', () => {
-    start('two')
+    start('three')
     const list = timers()
-    assert.equal(list.length, 1)
-    assert.equal(list[0].name, 'two')
+    assert.equal(count(), 1)
+    assert.equal(list[0].name, 'three')
     assert.equal(list[0].description, undefined)
-    stop('two')
+    stop('three')
     const vals = values()
-    assert(vals[0].startsWith('two;dur='))
+    assert(vals[0].startsWith('three;dur='))
   })
 
   await t.test('timer with no args', () => {
@@ -66,7 +76,7 @@ test('header-timers', async (t) => {
 
     start()
     const list = timers()
-    assert.equal(list.length, 1)
+    assert.equal(count(), 1)
     assert.equal(list[0].name, 'n1')
     assert.equal(list[0].description, undefined)
     stop()
@@ -124,6 +134,7 @@ test('header-timers with config', async (t) => {
       start,
       stop,
       timers,
+      count,
       values,
       value,
       toObject,
@@ -140,7 +151,8 @@ test('header-timers with config', async (t) => {
     assert.equal(stop('one'), 0)
     assert.equal(start('two'), 0n)
     assert.equal(stop('two'), 0)
-    assert.equal(timers.length, 0)
+    assert.equal(count(), 0)
+    assert.equal(timers().length, 0)
     assert.equal(values().length, 0)
     assert.equal(value(), '')
     assert.deepEqual(toObject(), { })
