@@ -47,13 +47,14 @@ export default function ({ enabled = true, precision = 3, prefix = 'n', key = KE
    * @param {string} [description]
    * @returns {bigint}
    */
-  function start (name, description) {
-    if (!name) {
-      name = `${prefix}${counter++}`
-      names.push(name)
+  function start(name, description) {
+    let timerName = name
+    if (!timerName) {
+      timerName = `${prefix}${counter++}`
+      names.push(timerName)
     }
     const start = hrtime.bigint()
-    _timers.set(name, { name, description, start })
+    _timers.set(timerName, { name: timerName, description, start })
     return start
   }
 
@@ -61,14 +62,15 @@ export default function ({ enabled = true, precision = 3, prefix = 'n', key = KE
    * @param {string} [name]
    * @returns {number | void}
    */
-  function stop (name) {
+  function stop(name) {
+    let timerName = name
     let autoNamed = false
-    if (!name) {
-      name = names.at(-1)
+    if (!timerName) {
+      timerName = names.at(-1)
       autoNamed = true
     }
-    if (!name) return
-    const timer = _timers.get(name)
+    if (!timerName) return
+    const timer = _timers.get(timerName)
     if (!timer) return
 
     if (autoNamed) names.pop()
@@ -77,20 +79,20 @@ export default function ({ enabled = true, precision = 3, prefix = 'n', key = KE
 
     timer.end = end
     timer.ms = ms
-    _timers.set(name, timer)
+    _timers.set(timerName, timer)
 
     return ms
   }
 
   /** @returns {void} */
-  function reset () {
+  function reset() {
     names = []
     counter = 1
     _timers.clear()
   }
 
   /** @returns {string[]} */
-  function values () {
+  function values() {
     const values = []
     for (const { name, description, ms } of _timers.values()) {
       if (!ms) continue
