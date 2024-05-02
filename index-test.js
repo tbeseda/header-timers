@@ -3,7 +3,7 @@ import test from 'node:test'
 import HeaderTimers from './index.js'
 
 test('header-timers', async (t) => {
-  const { key, start, stop, reset, timers, count, values, value, toObject, toString } =
+  const { key, start, stop, reset, timers, count, values, value, toObject, toString, mergeWithExisting } =
     HeaderTimers()
 
   await t.test('baseline without timers', () => {
@@ -72,6 +72,33 @@ test('header-timers', async (t) => {
     stop()
     const vals = values()
     assert(vals[0].startsWith('n1;dur='))
+  })
+
+  await t.test('merging with existing Server-Timing headers as string', () => {
+    reset()
+
+    start('db', 'Database query')
+    stop('db')
+
+    const existingHeaders = 'cache;desc="Cache Read";dur=23.2';
+    const mergedHeaders = mergeWithExisting(existingHeaders);
+
+    assert.equal(mergedHeaders, `${key}: cache;desc="Cache Read";dur=23.2, db;desc="Database query";dur=${timers()[0].ms}`);
+  })
+
+  await t.test('merging with existing Server-Timing headers as object', () => {
+    reset()
+
+    start('api', 'API call')
+    stop('api')
+
+    const existingHeaders = {
+      'Content-Type': 'application/json',
+      'Server-Timing': 'auth;desc="Authentication";dur=12.3'
+    };
+    const mergedHeaders = mergeWithExisting(existingHeaders);
+
+    assert.equal(mergedHeaders, `${key}: auth;desc="Authentication";dur=12.3, api;desc="API call";dur=${timers()[0].ms}`);
   })
 })
 
