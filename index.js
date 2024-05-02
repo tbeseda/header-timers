@@ -15,6 +15,7 @@ const KEY = 'Server-Timing'
  * @property {() => Record<string, string>} toObject
  * @property {() => string} toString
  * @property {() => void} reset
+ * @property {(existingHeaders: string | Record<string, string>) => string} mergeWithExisting
  */
 
 /**
@@ -34,6 +35,7 @@ export default function ({ enabled = true, precision = 3, prefix = 'n', key = KE
       toObject: () => ({}),
       toString: () => '',
       reset: () => null,
+      mergeWithExisting: () => '',
     }
   }
 
@@ -108,9 +110,28 @@ export default function ({ enabled = true, precision = 3, prefix = 'n', key = KE
   /** @returns {string} */
   const value = () => values().join(',')
   /** @returns {Record<string, string>} */
-  const toObject = () => ({ [key]: value() })
+  const toObject = (existingHeaders = {}) => {
+    const serverTimingHeader = value();
+    if (typeof existingHeaders === 'string') {
+      return { [key]: existingHeaders ? `${existingHeaders}, ${serverTimingHeader}` : serverTimingHeader };
+    } else if (typeof existingHeaders === 'object' && existingHeaders[key]) {
+      return { ...existingHeaders, [key]: `${existingHeaders[key]}, ${serverTimingHeader}` };
+    }
+    return { ...existingHeaders, [key]: serverTimingHeader };
+  }
   /** @returns {string} */
   const toString = () => `${key}: ${value()}`
+
+  /**
+   * Merges existing Server-Timing headers with header-timers values without overwriting.
+   * @param {string | Record<string, string>} existingHeaders - The existing headers as a string or object.
+   * @returns {string} - The merged Server-Timing header string.
+   */
+  function mergeWithExisting(existingHeaders) {
+    const mergedHeaders = toObject(existingHeaders);
+    return `${key}: ${mergedHeaders[key]}`;
+  }
+
   /** @returns {{ name: string, description?: string, start: bigint, end?: bigint, ms?: number }[]} */
   const timers = () => Array.from(_timers.values())
   /** @returns {number} */
@@ -127,5 +148,6 @@ export default function ({ enabled = true, precision = 3, prefix = 'n', key = KE
     toObject,
     toString,
     reset,
+    mergeWithExisting,
   }
 }
