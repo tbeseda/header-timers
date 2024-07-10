@@ -1,6 +1,6 @@
 {
   "name": "header-timers",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Server-Timing HTTP header helper",
   "author": "tbeseda",
   "license": "Apache-2.0",
@@ -8,10 +8,17 @@
     "type": "git",
     "url": "git+https://github.com/tbeseda/header-timers.git"
   },
-  "keywords": ["http", "server-timing", "header", "timer"],
+  "keywords": [
+    "http",
+    "server-timing",
+    "header",
+    "timer"
+  ],
   "main": "index.js",
   "type": "module",
-  "files": ["index.js"],
+  "files": [
+    "index.js"
+  ],
   "scripts": {
     "check": "biome check --write",
     "test": "biome ci && node --test"
