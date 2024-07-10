@@ -62,9 +62,9 @@ console.log(timers.values())
 */
 console.log(timers.value()) 
 // "open;dur=0.014ms, database;desc="collecting data";dur=603.512ms, analytics;desc="log request data";dur=101.475709ms"
-console.log(timers.toString())
+console.log(timers.string())
 // "Server-Timing: open;dur=0.014ms, database;desc="collecting data";dur=603.512ms, analytics;desc="log request data";dur=101.475709ms"
-console.log(timers.toObject())
+console.log(timers.object())
 /**
  {
    'Server-Timing': 'open;dur=0.026ms, database;desc="collecting data";dur=603.098792ms, analytics;desc="log request data";dur=101.776917ms'
@@ -89,7 +89,7 @@ stop('reset')
 
 console.log('TIMER COUNT', timers.timers().length) // 1
 
-console.log('NEW Header String', timers.toString())
+console.log('NEW Header String', timers.string())
 // NEW Header String "Server-Timing: reset;dur=101.799166ms"
 ```
 

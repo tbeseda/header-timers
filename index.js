@@ -12,8 +12,8 @@ const KEY = 'Server-Timing'
  * @property {() => number} count
  * @property {() => string[]} values
  * @property {() => string} value
- * @property {() => Record<string, string>} toObject
- * @property {() => string} toString
+ * @property {() => Record<string, string>} object
+ * @property {() => string} string
  * @property {() => void} reset
  */
 
@@ -31,8 +31,8 @@ export default function ({ enabled = true, precision = 3, prefix = 'n', key = KE
       count: () => 0,
       values: () => [],
       value: () => '',
-      toObject: () => ({}),
-      toString: () => '',
+      object: () => ({}),
+      string: () => '',
       reset: () => null,
     }
   }
@@ -108,9 +108,9 @@ export default function ({ enabled = true, precision = 3, prefix = 'n', key = KE
   /** @returns {string} */
   const value = () => values().join(',')
   /** @returns {Record<string, string>} */
-  const toObject = () => ({ [key]: value() })
+  const object = () => ({ [key]: value() })
   /** @returns {string} */
-  const toString = () => `${key}: ${value()}`
+  const string = () => `${key}: ${value()}`
   /** @returns {{ name: string, description?: string, start: bigint, end?: bigint, ms?: number }[]} */
   const timers = () => Array.from(_timers.values())
   /** @returns {number} */
@@ -124,8 +124,8 @@ export default function ({ enabled = true, precision = 3, prefix = 'n', key = KE
     count,
     values,
     value,
-    toObject,
-    toString,
+    object,
+    string,
     reset,
   }
 }

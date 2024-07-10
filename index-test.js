@@ -3,8 +3,7 @@ import test from 'node:test'
 import HeaderTimers from './index.js'
 
 test('header-timers', async (t) => {
-  const { key, start, stop, reset, timers, count, values, value, toObject, toString } =
-    HeaderTimers()
+  const { key, start, stop, reset, timers, count, values, value, object, string } = HeaderTimers()
 
   await t.test('baseline without timers', () => {
     assert.equal(typeof key, 'string')
@@ -12,8 +11,8 @@ test('header-timers', async (t) => {
     assert.equal(timers().length, 0)
     assert.equal(values().length, 0)
     assert.equal(value(), '')
-    assert.deepEqual(toObject(), { [key]: '' })
-    assert.equal(toString(), `${key}: `)
+    assert.deepEqual(object(), { [key]: '' })
+    assert.equal(string(), `${key}: `)
   })
 
   await t.test('timer with name and description', () => {
@@ -32,8 +31,8 @@ test('header-timers', async (t) => {
     const vals = values()
     assert(vals[0].startsWith('one;desc="description";dur='))
     assert.equal(value(), vals[0])
-    assert.deepEqual(toObject(), { [key]: vals[0] })
-    assert.equal(toString(), `${key}: ${vals[0]}`)
+    assert.deepEqual(object(), { [key]: vals[0] })
+    assert.equal(string(), `${key}: ${vals[0]}`)
 
     start('two')
     assert.equal(count(), 2)
@@ -115,8 +114,9 @@ test('header-timers with config', async (t) => {
   })
 
   await t.test('disabled timers', () => {
-    const { key, start, stop, timers, count, values, value, toObject, toString, reset } =
-      HeaderTimers({ enabled: false })
+    const { key, start, stop, timers, count, values, value, object, string, reset } = HeaderTimers({
+      enabled: false,
+    })
 
     assert.equal(typeof key, 'string')
     assert.equal(typeof start, 'function')
@@ -131,8 +131,8 @@ test('header-timers with config', async (t) => {
     assert.equal(timers().length, 0)
     assert.equal(values().length, 0)
     assert.equal(value(), '')
-    assert.deepEqual(toObject(), {})
-    assert.equal(toString(), '')
+    assert.deepEqual(object(), {})
+    assert.equal(string(), '')
     assert.equal(reset(), null)
   })
 })

@@ -8,24 +8,15 @@
     "type": "git",
     "url": "git+https://github.com/tbeseda/header-timers.git"
   },
-  "keywords": [
-    "http",
-    "server-timing",
-    "header",
-    "timer"
-  ],
+  "keywords": ["http", "server-timing", "header", "timer"],
   "main": "index.js",
   "type": "module",
-  "files": [
-    "index.js"
-  ],
+  "files": ["index.js"],
   "scripts": {
-    "check": "biome check --apply ./",
-    "lint": "biome lint --apply ./",
-    "format": "biome format --write ./",
-    "test": "node --test"
+    "check": "biome check --write",
+    "test": "biome ci && node --test"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.5.3"
+    "@biomejs/biome": "^1.8.3"
   }
 }

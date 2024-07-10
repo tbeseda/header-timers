@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.3.0 (UNRELEASED)
+
+### Changed
+
+- BREAKING: `#toString()` is now `#string()`
+- BREAKING: `#toObject()` is now `#object()`
+
+The `toString` method name was changed to `string` to avoid confusion with the native `toString` method. To keep the API consistent, the `toObject` method was also changed to `object`.
+
 ## 0.2.1
 
 ### Added
